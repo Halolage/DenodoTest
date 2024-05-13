@@ -1,0 +1,5 @@
+﻿CREATE OR REPLACE DATABASE denodo_training_testuserhalo '';
+
+ALTER DATABASE denodo_training_testuserhalo
+  CHARSET DEFAULT;
+

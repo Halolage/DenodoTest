@@ -1,0 +1,51 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_wo_storages
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_web_orders
+    CATALOGNAME='${databases.denodo_training_testuserhalo.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_wo_storages.CATALOGNAME}' 
+    SCHEMANAME='${databases.denodo_training_testuserhalo.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_wo_storages.SCHEMANAME}' 
+    RELATIONNAME='storages' 
+    OUTPUTSCHEMA (
+        id = 'ID' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        address = 'ADDRESS' :'java.lang.String' (OPT) (sourcetypesize='150', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        city = 'CITY' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        postal_code = 'POSTAL_CODE' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        country = 'COUNTRY' :'java.lang.String' (OPT) (sourcetypesize='70', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        country_code = 'COUNTRY_CODE' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        latitude = 'LATITUDE' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='10', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='3', sourcetypename='decimal')  SORTABLE,
+        longitude = 'LONGITUDE' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='10', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='3', sourcetypename='decimal')  SORTABLE
+    )
+    CONSTRAINT 'storages_PRIMARY' PRIMARY KEY ( 'ID' )
+    INDEX 'storages_PRIMARY' CLUSTER UNIQUE PRIMARY ( 'ID' );
+
+CREATE OR REPLACE TABLE bv_wo_storages I18N us_pst (
+        id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        address:text (sourcetypeid = '12', sourcetypesize = '150'),
+        city:text (sourcetypeid = '12', sourcetypesize = '50'),
+        postal_code:text (sourcetypeid = '12', sourcetypesize = '20'),
+        country:text (sourcetypeid = '12', sourcetypesize = '70'),
+        country_code:text (sourcetypeid = '12', sourcetypesize = '20'),
+        latitude:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '10', sourcetypesize = '20'),
+        longitude:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '10', sourcetypesize = '20')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_wo_storages(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD address (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD postal_code (any) OPT ANY
+             ADD country (any) OPT ANY
+             ADD country_code (any) OPT ANY
+             ADD latitude (any) OPT ANY
+             ADD longitude (any) OPT ANY
+        )
+        OUTPUTLIST (address, city, country, country_code, id, latitude, longitude, postal_code
+        )
+        WRAPPER (jdbc bv_wo_storages)
+    );
+

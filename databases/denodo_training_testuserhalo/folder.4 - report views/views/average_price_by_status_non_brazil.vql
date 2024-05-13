@@ -1,0 +1,5 @@
+﻿CREATE OR REPLACE VIEW average_price_by_status_non_brazil FOLDER = '/4 - report views' DESCRIPTION = 'The average price indicative of status excluding Brazil main country'  (
+    "AVG_productprice" (description = '')
+ )
+ AS SELECT iv_customer_orders.status AS status, avg(iv_customer_orders.productprice) AS "AVG_productprice" FROM iv_customer_orders WHERE main_country <> 'Brazil' GROUP BY iv_customer_orders.status;
+

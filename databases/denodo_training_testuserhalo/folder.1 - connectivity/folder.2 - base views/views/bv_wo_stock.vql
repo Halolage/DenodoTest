@@ -1,0 +1,39 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_wo_stock
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_web_orders
+    CATALOGNAME='${databases.denodo_training_testuserhalo.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_wo_stock.CATALOGNAME}' 
+    SCHEMANAME='${databases.denodo_training_testuserhalo.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_wo_stock.SCHEMANAME}' 
+    RELATIONNAME='stock' 
+    OUTPUTSCHEMA (
+        id = 'ID' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        product_id = 'PRODUCT_ID' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE,
+        distribution_code = 'DISTRIBUTION_CODE' :'java.lang.String' (OPT) (sourcetypesize='100', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        storage_id = 'STORAGE_ID' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'stock_PRIMARY' PRIMARY KEY ( 'ID' )
+    INDEX 'stock_PRIMARY' CLUSTER UNIQUE PRIMARY ( 'ID' );
+
+CREATE OR REPLACE TABLE bv_wo_stock I18N us_pst (
+        id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        product_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        distribution_code:text (notnull, sourcetypeid = '12', sourcetypesize = '100'),
+        storage_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_wo_stock(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD product_id (any) OPT ANY
+             ADD distribution_code (any) OPT ANY
+             ADD storage_id (any) OPT ANY
+        )
+        OUTPUTLIST (distribution_code, id, product_id, storage_id
+        )
+        WRAPPER (jdbc bv_wo_stock)
+    );
+

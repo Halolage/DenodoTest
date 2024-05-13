@@ -1,0 +1,60 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_hr_employees
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_human_resources
+    CATALOGNAME='${databases.denodo_training_testuserhalo.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_hr_employees.CATALOGNAME}' 
+    SCHEMANAME='${databases.denodo_training_testuserhalo.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_hr_employees.SCHEMANAME}' 
+    RELATIONNAME='EMPLOYEES' 
+    OUTPUTSCHEMA (
+        employee_id = 'EMPLOYEE_ID' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='22', sourcetypeid='3', sourcetypename='decimal')  NOT NULL SORTABLE,
+        first_name = 'FIRST_NAME' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        last_name = 'LAST_NAME' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        email = 'EMAIL' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        phone_number = 'PHONE_NUMBER' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        hire_date = 'HIRE_DATE' :'java.time.LocalDateTime' (OPT) (sourcetypedecimals='3', sourcetypesize='23', sourcetypeid='93', sourcetypename='datetime')  NOT NULL SORTABLE,
+        job_id = 'JOB_ID' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='12', sourcetypename='varchar')  NOT NULL SORTABLE,
+        salary = 'SALARY' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='22', sourcetypeid='3', sourcetypename='decimal')  SORTABLE,
+        commission_pct = 'COMMISSION_PCT' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='22', sourcetypeid='3', sourcetypename='decimal')  SORTABLE,
+        manager_id = 'MANAGER_ID' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='22', sourcetypeid='3', sourcetypename='decimal')  SORTABLE,
+        department_id = 'DEPARTMENT_ID' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='22', sourcetypeid='3', sourcetypename='decimal')  SORTABLE
+    )
+    CONSTRAINT 'EMPLOYEES_PK' PRIMARY KEY ( 'EMPLOYEE_ID' )
+    INDEX 'EMPLOYEES_PK' CLUSTER UNIQUE PRIMARY ( 'EMPLOYEE_ID' );
+
+CREATE OR REPLACE TABLE bv_hr_employees I18N us_pst (
+        employee_id:decimal (notnull, sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '22'),
+        first_name:text (sourcetypeid = '12', sourcetypesize = '20'),
+        last_name:text (notnull, sourcetypeid = '12', sourcetypesize = '25'),
+        email:text (notnull, sourcetypeid = '12', sourcetypesize = '50'),
+        phone_number:text (sourcetypeid = '12', sourcetypesize = '20'),
+        hire_date:timestamp (notnull, sourcetypeid = '93', sourcetypedecimals = '3', sourcetypesize = '23'),
+        job_id:text (notnull, sourcetypeid = '12', sourcetypesize = '10'),
+        salary:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '22'),
+        commission_pct:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '22'),
+        manager_id:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '22'),
+        department_id:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '22')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'employee_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_hr_employees(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD employee_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD hire_date (any) OPT ANY
+             ADD job_id (any) OPT ANY
+             ADD salary (any) OPT ANY
+             ADD commission_pct (any) OPT ANY
+             ADD manager_id (any) OPT ANY
+             ADD department_id (any) OPT ANY
+        )
+        OUTPUTLIST (commission_pct, department_id, email, employee_id, first_name, hire_date, job_id, last_name, manager_id, phone_number, salary
+        )
+        WRAPPER (jdbc bv_hr_employees)
+    );
+
